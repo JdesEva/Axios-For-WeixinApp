@@ -1,0 +1,9 @@
+{
+  "name": "Axios_For_WeixinApp",
+  "version": "1.0.0",
+  "main": "axios.js",
+  "repository": "git@github.com:JdesEva/Axios-For-WeixinApp.git",
+  "author": "Jdeseva",
+  "description": "基于axios的微信请求方法封装，支持axios大部分特性",
+  "license": "MIT"
+}
