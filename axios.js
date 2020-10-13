@@ -1,6 +1,6 @@
 
 /**
- * Axios 实体类 
+ * Axios 实体类
  * @param options 实例参数 支持 Loading baseUrl loadingAwait loadingMask
  * @param get GET请求方法
  * @param post POST请求方法
@@ -21,9 +21,9 @@ class Axios {
   }
 
   /**
-   * 
+   *
    * @param {String} api —— API 地址
-   * @param {Object} data —— 请求数据 
+   * @param {Object} data —— 请求数据
    * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
    * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
    */
@@ -32,9 +32,9 @@ class Axios {
   }
 
   /**
-   * 
+   *
    * @param {String} api —— API 地址
-   * @param {Object} data —— 请求数据 
+   * @param {Object} data —— 请求数据
    * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
    * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
    */
@@ -103,8 +103,9 @@ function wxRequest(ref, type, loading = '', api, data = {}, opt = {}) {
         })
       }, ref.loadingAwait)
     }
-    console.log(ref)
+
     if (request.handlers.length > 0) config = request.handlers[0].call(this, config) // request 拦截器
+
     wx.request({
       url: `${ref.baseUrl}${api}`,
       method: type,
