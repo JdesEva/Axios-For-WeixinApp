@@ -1,6 +1,6 @@
 {
   "name": "axios-for-mpweixin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "miniprogram": "miniprogram_dist",
   "main": "axios.js",
   "repository": "git@github.com:JdesEva/Axios-For-WeixinApp.git",

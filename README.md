@@ -1,4 +1,4 @@
-# Axios For WeixinApp
+# axios-for-mpweixin
 
 > Axios 微信小程序版本
 
@@ -6,9 +6,18 @@
 
 - 使用方法
 
+微信小程序根目录执行以下命令
+
+```
+npm i axios-for-mpweixin
+```
+
+然后使用微信开发者工具进行构建
+
+
 > 在 App.js 中
 ```
-const { axios } = require('./axios')
+const { axios } = require('axios-for-mpweixin')
 
 wx.axios = axios() // 必须调用 axios 才能实例化成功
 ```
@@ -49,7 +58,7 @@ const { axios } = require('./axios')
 wx.axios = axios({
   timeout: 30000,
   loadingAwait: 800
-}) 
+})
 ```
 
 - 方法列表
@@ -61,7 +70,7 @@ wx.axios = axios({
 参数列表为
 
  * @param {String} api —— API 地址
- * @param {Object} data —— 请求数据 
+ * @param {Object} data —— 请求数据
  * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
  * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
 
@@ -72,7 +81,7 @@ wx.axios = axios({
 参数列表为
 
  * @param {String} api —— API 地址
- * @param {Object} data —— 请求数据 
+ * @param {Object} data —— 请求数据
  * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
  * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
 
