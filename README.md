@@ -53,7 +53,7 @@ Page({
 > - @param timeout = 0 // 单位 ms (0 代表默认值，即不设置超时时间)
 
 ```
-const { axios } = require('./axios')
+const { axios } = require('axios-for-mpweixin')
 
 wx.axios = axios({
   timeout: 30000,
