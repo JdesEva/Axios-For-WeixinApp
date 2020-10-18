@@ -1,4 +1,3 @@
-
 /**
  * Axios 实体类
  * @param options 实例参数 支持 Loading baseUrl loadingAwait loadingMask
@@ -16,30 +15,68 @@ class Axios {
     this.timeout = options.timeout || 0
     this.interceptors = {
       request: new InterceptorManager(),
-      response: new InterceptorManager()
+      response: new InterceptorManager(),
     }
   }
 
   /**
-   *
-   * @param {String} api —— API 地址
-   * @param {Object} data —— 请求数据
-   * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
-   * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
+   * GET请求
+   * @param {String} url —— API 地址
+   * @param {Object} args —— 参数列表， 如下格式
+   * axios.get(api[, data, config])
    */
-  get(api, data = {}, loading = '', opt = {}) {
-    return wxRequest(this, 'GET', loading ? loading : this.loading, api, data, opt)
+  get(url, ...args) {
+    return wxRequest(this, 'GET', url, args[0] || {}, args[1] || {})
   }
 
   /**
-   *
-   * @param {String} api —— API 地址
-   * @param {Object} data —— 请求数据
-   * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
-   * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
+   * POST请求
+   * @param {String} url —— API 地址
+   * @param {Object} args —— 参数列表， 如下格式
+   * axios.post(url[, data[, config]])
    */
-  post(api, data = {}, loading = '', opt = {}) {
-    return wxRequest(this, 'POST', loading ? loading : this.loading, api, data, opt)
+  post(url, ...args) {
+    return wxRequest(this, 'POST', url, args[0] || {}, args[1] || {})
+  }
+
+  /**
+   * DELETE请求
+   * @param {String} url —— API 地址
+   * @param {Object} args —— 参数列表， 如下格式
+   * axios.delete(url[, config])
+   */
+  delete(url, ...args) {
+    return wxRequest(this, 'DELETE', url, args[0] || {}, args[1] || {})
+  }
+
+  /**
+   * OPTIONS请求
+   * @param {String} url —— API 地址
+   * @param {Object} args —— 参数列表， 如下格式
+   * axios.options(url[, data[, config]])
+   */
+  options(url, ...args) {
+    return wxRequest(this, 'OPTIONS', url, args[0] || {}, args[1] || {})
+  }
+
+  /**
+   * HEAD请求
+   * @param {String} url —— API 地址
+   * @param {Object} args —— 参数列表， 如下格式
+   * axios.head(url[, data[, config]])
+   */
+  head(url, ...args) {
+    return wxRequest(this, 'HEAD', url, args[0] || {}, args[1] || {})
+  }
+
+  /**
+   * PUT请求
+   * @param {String} url —— API 地址
+   * @param {Object} args —— 参数列表， 如下格式
+   * axios.put(url[, data[, config]])
+   */
+  put(url, ...args) {
+    return wxRequest(this, 'PUT', url, args[0] || {}, args[1] || {})
   }
 
   /**
@@ -67,20 +104,19 @@ class Axios {
       return callback.apply(null, arr)
     }
   }
-
 }
 
 /**
  * 公共请求方法
  * @param {String} type 请求方式
- * @param {String} loading 加载文字
  * @param {String} api 接口地址
  * @param {Object} data 请求体
- * @param {Object} opt 附加参数
+ * @param {Object} options 附加参数
  */
-function wxRequest(ref, type, loading = '', api, data = {}, opt = {}) {
+function wxRequest(ref, type, api, data = {}, options) {
   const { request, response } = ref.interceptors // 拦截器
-  let config = { // 请求配置项
+  let config = {
+    // 请求配置项
     header: {},
     timeout: ref.timeout || 0,
     dataType: 'json',
@@ -88,38 +124,65 @@ function wxRequest(ref, type, loading = '', api, data = {}, opt = {}) {
     enableHttp2: false,
     enableQuic: false,
     enableCache: false,
-    ...opt
+    baseUrl: ref.baseUrl,
+    loading: ref.loading,
+    loadingAwait: ref.loadingAwait,
+    loadingMask: ref.loadingMask,
+    data: data,
   }
+
   let timer = null // 请求Loading 延迟
 
   return new Promise((resolve, reject) => {
-    if (loading) {
+    if (request.handlers.length > 0) {
+      config = request.handlers[0].call(this, config) // request 拦截器
+    }
+
+    let header = {
+      ...config.header,
+      ...options.header,
+    }
+
+    Reflect.deleteProperty(config, 'header')
+    Reflect.deleteProperty(options, 'header')
+
+    config = {
+      ...config,
+      ...options,
+      header,
+    }
+
+    if (config.loading) {
       // 下面的作用是在极短的 pendding 内不显示 Loading 以获得更好的用户体验
       if (timer) clearTimeout(timer)
       timer = setTimeout(() => {
         wx.showLoading({
-          title: loading,
-          mask: ref.loadingMask
+          title: config.loading,
+          mask: config.loadingMask,
         })
-      }, ref.loadingAwait)
+      }, config.loadingAwait)
     }
 
-    if (request.handlers.length > 0) config = request.handlers[0].call(this, config) // request 拦截器
-
     wx.request({
-      url: `${ref.baseUrl}${api}`,
+      url: `${config.baseUrl}${api}`,
       method: type,
       data: data,
       ...config,
-      success: res => {
+      success: (res) => {
         if (timer) clearTimeout(timer)
         if (response.handlers.length > 0) {
-          resolve(response.handlers[0].call(this, res) || {})
+          resolve(
+            response.handlers[0].call(this, {
+              ...res,
+              header: { ...res.header, ...header },
+              config: config,
+            }) || {}
+          )
         } else {
           resolve(res)
         }
       },
-      fail: err => {
+      fail: (err) => {
         if (response.handlers.length > 1) {
           reject(response.handlers[1].call(this, err))
         } else {
@@ -127,8 +190,11 @@ function wxRequest(ref, type, loading = '', api, data = {}, opt = {}) {
         }
       },
       complete: () => {
-        if (loading) wx.hideLoading()
-      }
+        if (config.loading) wx.hideLoading()
+        config = null
+        header = null
+        timer = null
+      },
     })
   })
 }
@@ -147,7 +213,6 @@ InterceptorManager.prototype.use = function use(fulfilled, rejected) {
   this.handlers.push(fulfilled, rejected)
 }
 
-
 /**
  * 初始化Axios
  * @param {Object} defaults Axios 实例化参数
@@ -157,5 +222,5 @@ const axios = function (defaults = {}) {
 }
 
 module.exports = {
-  axios
+  axios,
 }

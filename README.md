@@ -34,23 +34,16 @@ Page({
 })
 ```
 
-## 全局配置
+## 全局配置列表
 
-- 实例化参数列表
+|参数名|类型|默认值| 说明|
+|-|-|-|-|
+|loading| String | 'Loading...' | wx.showLoading 的 titile， 存在此项则会开启请求 Loading|
+|baseUrl|String |'' | wx.request 中 url 的前缀拼接，作用和 axios.js 中 baseURL 一样|
+|loadingAwait | Number |800(ms)| 即如果开启 Loading 后，必须接口请求的 pendding 时间大于该时间才会显示 Loading，以获得更好的用户体验
+|loadingMask| Boolean| true | wx.showLoading 的 mask 属性，控制遮罩层
+|timeout|Number| 0 | wx.request 的 timeout 属性，代表接口超时时间，0代表不设置|
 
-> - loading  —— Loading 文字，存在此项则会开启请求 Loading
-> - baseUrl  —— API 接口地址前缀链接，作用和 axios.js 中一样
-> - loadingAwait  —— Loading 响应延迟，即如果开启 Loading 后，必须接口请求的 pendding 时间大于该时间才会显示 Loading，以获得更好的用户体验
-> - loadingMask  —— wx.showLoading 的 mask 层的显示隐藏
-> - timeout  —— 接口超时时间
-
-- 默认值
-
-> - @param loading = 'Loading...'
-> - @param baseUrl = ''
-> - @param loadingAwait = 800 // 单位 ms
-> - @param loadingMask = true
-> - @param timeout = 0 // 单位 ms (0 代表默认值，即不设置超时时间)
 
 ```
 const { axios } = require('axios-for-mpweixin')
@@ -61,33 +54,105 @@ wx.axios = axios({
 })
 ```
 
-- 方法列表
+
+
+## 方法列表
 
 ### axios.get
 
 使用方法基本同 axios.js 中的 get 方法
 
-参数列表为
+```
+wx.axios.get(url[, data[, config]])
+```
 
- * @param {String} api —— API 地址
- * @param {Object} data —— 请求数据
- * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
- * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
+|参数名 | 类型 |  默认值  | 说明 |
+|-|-|-----|-|
+| url | String | '' | API 地址， 即 wx.request 的 url，注意，该属性会拼接全局设置的 baseUrl，同时，如果 opt 中设置了 baseUrl， 则以 opt 中为准|
+|data| Object| {} |  wx.request 中的 data，无论何种形式的请求，请保证请求体均为一个对象 |
+| config | Object | {} | 接口独享的额外配置参数，和 axios.js 一样，优先级最高，最终会被合并进 wx.request 中|
 
 ### axios.post
 
 使用方法基本同 axios.js 中的 post 方法
 
-参数列表为
+```
+wx.axios.post(url[, data[, config]])
+```
 
- * @param {String} api —— API 地址
- * @param {Object} data —— 请求数据
- * @param {String} loading —— Loading 文字，优先级比实例化传入的loading的高
- * @param {Object} opt —— 请求附加参数，最终会被合并进 wx.request 中
+|参数名 | 类型 |  默认值  | 说明 |
+|-|-|-----|-|
+| url | String | '' | API 地址， 即 wx.request 的 url，注意，该属性会拼接全局设置的 baseUrl，同时，如果 opt 中设置了 baseUrl， 则以 opt 中为准|
+|data| Object| {} |  wx.request 中的 data，无论何种形式的请求，请保证请求体均为一个对象 |
+| config | Object | {} | 接口独享的额外配置参数，和 axios.js 一样，优先级最高，最终会被合并进 wx.request 中|
+
+### axios.delete
+
+使用方法基本同 axios.js 中的 delete 方法
+
+```
+wx.axios.delete(url[, config])
+```
+
+|参数名 | 类型 |  默认值  | 说明 |
+|-|-|-----|-|
+| url | String | '' | API 地址， 即 wx.request 的 url，注意，该属性会拼接全局设置的 baseUrl，同时，如果 opt 中设置了 baseUrl， 则以 opt 中为准|
+| config | Object | {} | 接口独享的额外配置参数，和 axios.js 一样，优先级最高，最终会被合并进 wx.request 中|
+
+### axios.options
+
+使用方法基本同 axios.js 中的 options 方法
+
+```
+wx.axios.options(url[, config])
+```
+
+|参数名 | 类型 |  默认值  | 说明 |
+|-|-|-----|-|
+| url | String | '' | API 地址， 即 wx.request 的 url，注意，该属性会拼接全局设置的 baseUrl，同时，如果 opt 中设置了 baseUrl， 则以 opt 中为准|
+| config | Object | {} | 接口独享的额外配置参数，和 axios.js 一样，优先级最高，最终会被合并进 wx.request 中|
+
+### axios.head
+
+使用方法基本同 axios.js 中的 head 方法
+
+```
+wx.axios.head(url[, config])
+```
+
+|参数名 | 类型 |  默认值  | 说明 |
+|-|-|-----|-|
+| url | String | '' | API 地址， 即 wx.request 的 url，注意，该属性会拼接全局设置的 baseUrl，同时，如果 opt 中设置了 baseUrl， 则以 opt 中为准|
+| config | Object | {} | 接口独享的额外配置参数，和 axios.js 一样，优先级最高，最终会被合并进 wx.request 中|
+
+### axios.put
+
+使用方法基本同 axios.js 中的 put 方法
+
+```
+wx.axios.put(url[, data[, config]])
+```
+
+|参数名 | 类型 |  默认值  | 说明 |
+|-|-|-----|-|
+| url | String | '' | API 地址， 即 wx.request 的 url，注意，该属性会拼接全局设置的 baseUrl，同时，如果 opt 中设置了 baseUrl， 则以 opt 中为准|
+|data| Object| {} |  wx.request 中的 data，无论何种形式的请求，请保证请求体均为一个对象 |
+| config | Object | {} | 接口独享的额外配置参数，和 axios.js 一样，优先级最高，最终会被合并进 wx.request 中|
+
+
 
 ### axios.all
 
 执行并发请求，全部请求成功才会进入成功的回调，有任何一个错误均会进入catch回调
+
+```
+let v1 = wx.axios.get(api1)
+let v2 = wx.axios.get(api2)
+wx.axios.all([v1, v2]).then(([r1, r2]) => {
+  console.log(r1, r2)
+})
+
+```
 
 原理为  Promise.all
 
@@ -97,6 +162,17 @@ wx.axios = axios({
 
 执行并发请求，任何一个请求返回后就会进入成功的回调
 
+> 即无论有多少个请求发出，只会收到第一个返回成功的请求，其他请求返回结果全部丢弃
+
+```
+let v1 = wx.axios.get(api1)
+let v2 = wx.axios.get(api2)
+wx.axios.all([v1, v2]).then(([r]) => {
+  console.log(r1)
+})
+
+```
+
 原理为  Promise.race
 
 具体可以参考 axios.js 文档
@@ -105,6 +181,14 @@ wx.axios = axios({
 
 并发请求中使用，对返回结果进行展开，具体可以参考 axios.js 文档
 
+```
+let v1 = wx.axios.get(api1)
+let v2 = wx.axios.get(api2)
+wx.axios.all([v1, v2]).then(wx.axios.spread((r1, r2) => {
+  console.log(r1, r2)
+}))
+
+```
 
 ## 拦截器 interceptors
 
