@@ -7,15 +7,6 @@
  * @param race 并发  Promise.race
  */
 
-
-/**
- * 兼容支付宝小程序
- *
- * wx = wx || my
- */
-
-const wx = wx || my
-
 class Axios {
   constructor(options) {
     this.loading = options.loading || 'Loading...'
@@ -125,6 +116,7 @@ class Axios {
  */
 function wxRequest(ref, type, api, data = {}, options) {
   const { request, response } = ref.interceptors // 拦截器
+
   let config = {
     // 请求配置项
     header: {},
@@ -166,14 +158,14 @@ function wxRequest(ref, type, api, data = {}, options) {
       // 下面的作用是在极短的 pendding 内不显示 Loading 以获得更好的用户体验
       if (timer) clearTimeout(timer)
       timer = setTimeout(() => {
-        wx.showLoading({
+        we.showLoading({
           title: config.loading,
           mask: config.loadingMask,
         })
       }, config.loadingAwait)
     }
 
-    wx.request({
+    we.request({
       url: `${config.baseUrl}${api}`,
       method: type,
       data: data,
@@ -200,7 +192,7 @@ function wxRequest(ref, type, api, data = {}, options) {
         }
       },
       complete: () => {
-        if (config.loading) wx.hideLoading()
+        if (config.loading) we.hideLoading()
         config = null
         header = null
         timer = null
