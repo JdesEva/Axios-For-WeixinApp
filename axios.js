@@ -14,7 +14,7 @@
  * wx = wx || my
  */
 
-wx = wx || my
+const wx = wx || my
 
 class Axios {
   constructor(options) {
