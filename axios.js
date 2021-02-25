@@ -6,6 +6,16 @@
  * @param all 并发请求 Promise.all
  * @param race 并发  Promise.race
  */
+
+
+/**
+ * 兼容支付宝小程序
+ *
+ * wx = wx || my
+ */
+
+wx = wx || my
+
 class Axios {
   constructor(options) {
     this.loading = options.loading || 'Loading...'

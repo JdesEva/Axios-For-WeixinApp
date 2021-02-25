@@ -1,6 +1,6 @@
 {
   "name": "axios-for-mpweixin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "miniprogram": "miniprogram_dist",
   "main": "axios.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/JdesEva/Axios-For-WeixinApp.git"
   },
   "author": "Jdeseva",
-  "description": "基于axios的微信请求方法封装，支持axios大部分特性",
+  "description": "基于axios的小程序请求方法封装，支持axios大部分特性",
   "license": "MIT",
   "private": false,
   "keywords": [
