@@ -116,7 +116,9 @@ class Axios {
  */
 function wxRequest(ref, type, api, data = {}, options) {
   const { request, response } = ref.interceptors // 拦截器
-
+  
+  we = wx || my
+  
   let config = {
     // 请求配置项
     header: {},
