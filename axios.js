@@ -9,7 +9,7 @@
 
 class Axios {
   constructor(options) {
-    this.loading = options.loading || 'Loading...'
+    this.loading = options.hasOwnProperty('loading') ? (options.loading || 'Loading...') : false
     this.baseUrl = options.baseUrl || ''
     this.loadingAwait = options.loadingAwait || 800
     this.loadingMask = options.loadingMask || true
@@ -116,9 +116,9 @@ class Axios {
  */
 function wxRequest(ref, type, api, data = {}, options) {
   const { request, response } = ref.interceptors // 拦截器
-  
-  we = wx || my
-  
+
+  const we = wx || my // 本质上 由于编译规则，这行代码在 支付宝体系下会报错
+
   let config = {
     // 请求配置项
     header: {},
