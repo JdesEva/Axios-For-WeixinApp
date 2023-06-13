@@ -19,9 +19,11 @@ npm i axios-for-mpweixin
 > 在 App.js 中
 
 ```
-const { axios } = require('axios-for-mpweixin')
+const axios = require('axios-for-mpweixin')
 
-wx.axios = axios() // 必须调用 axios 才能实例化成功
+axios.create({
+  // 相关参数
+})
 ```
 
 > 在其他页面中

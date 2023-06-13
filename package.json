@@ -1,6 +1,6 @@
 {
   "name": "axios-for-mpweixin",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "miniprogram": "miniprogram_dist",
   "main": "axios.js",
   "repository": {
