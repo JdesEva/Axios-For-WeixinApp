@@ -9,7 +9,9 @@
 
 class Axios {
   constructor(options) {
-    this.loading = options.hasOwnProperty('loading') ? (options.loading || 'Loading...') : false
+    this.loading = options.hasOwnProperty('loading')
+      ? options.loading || 'Loading...'
+      : false
     this.baseUrl = options.baseUrl || ''
     this.loadingAwait = options.loadingAwait || 800
     this.loadingMask = options.loadingMask || true
@@ -18,6 +20,18 @@ class Axios {
       request: new InterceptorManager(),
       response: new InterceptorManager(),
     }
+  }
+
+  /**
+   * 初始化创建参数
+   * @param {*} defaults 
+   */
+  create(defaults = {}) {
+    Object.keys(defaults).map(key => {
+      if(this[key]) {
+        this[key] = defaults[key]
+      }
+    })
   }
 
   /**
@@ -117,8 +131,6 @@ class Axios {
 function wxRequest(ref, type, api, data = {}, options) {
   const { request, response } = ref.interceptors // 拦截器
 
-  const we = wx || my // 本质上 由于编译规则，这行代码在 支付宝体系下会报错
-
   let config = {
     // 请求配置项
     header: {},
@@ -160,14 +172,14 @@ function wxRequest(ref, type, api, data = {}, options) {
       // 下面的作用是在极短的 pendding 内不显示 Loading 以获得更好的用户体验
       if (timer) clearTimeout(timer)
       timer = setTimeout(() => {
-        we.showLoading({
+        wx.showLoading({
           title: config.loading,
           mask: config.loadingMask,
         })
       }, config.loadingAwait)
     }
 
-    we.request({
+    wx.request({
       url: `${config.baseUrl}${api}`,
       method: type,
       data: data,
@@ -194,7 +206,7 @@ function wxRequest(ref, type, api, data = {}, options) {
         }
       },
       complete: () => {
-        if (config.loading) we.hideLoading()
+        if (config.loading) wx.hideLoading()
         config = null
         header = null
         timer = null
@@ -219,12 +231,5 @@ InterceptorManager.prototype.use = function use(fulfilled, rejected) {
 
 /**
  * 初始化Axios
- * @param {Object} defaults Axios 实例化参数
  */
-const axios = function (defaults = {}) {
-  return new Axios(defaults)
-}
-
-module.exports = {
-  axios,
-}
+export default new Axios()
