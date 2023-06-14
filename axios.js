@@ -8,7 +8,7 @@
  */
 
 class Axios {
-  constructor(options) {
+  constructor(options = {}) {
     this.loading = options.hasOwnProperty('loading')
       ? options.loading || 'Loading...'
       : false
